@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { shopifyToken } from './credentials';
+import { CartService } from './shared/services/cart.service';
+import { ShopifyService } from './shared/services/shopify.service';
 
 @Component({
   selector: 'app-root',
@@ -10,25 +11,23 @@ import { shopifyToken } from './credentials';
 export class AppComponent implements OnInit {
   title = 'mean-store-front-end';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private shopify: ShopifyService,
+    private cartService: CartService
+  ) {}
 
   ngOnInit(): void {
     console.log('hello');
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'X-Shopify-Storefront-Access-Token': shopifyToken,
-    });
-    this.http
-      .post(
-        'https://morlandsdevstore.myshopify.com/api/graphql.json',
-        {
-          query:
-            'query{products (first: 5) {edges {node {id title description}}}}',
-        },
-        { headers: headers }
-      )
-      .subscribe((res) => {
+    this.shopify.makeShopifyAPIRequest(1).subscribe((res) => {
+      console.log(res);
+      this.cartService.cartObs.subscribe((res) => {
         console.log(res);
       });
+    });
+  }
+
+  addItem() {
+    this.cartService.cart = [...this.cartService.cart, 1];
   }
 }
