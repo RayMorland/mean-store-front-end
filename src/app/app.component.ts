@@ -11,23 +11,7 @@ import { ShopifyService } from './shared/services/shopify.service';
 export class AppComponent implements OnInit {
   title = 'mean-store-front-end';
 
-  constructor(
-    private http: HttpClient,
-    private shopify: ShopifyService,
-    private cartService: CartService
-  ) {}
+  constructor() {}
 
-  ngOnInit(): void {
-    console.log('hello');
-    this.shopify.makeShopifyAPIRequest(1).subscribe((res) => {
-      console.log(res);
-      this.cartService.cartObs.subscribe((res) => {
-        console.log(res);
-      });
-    });
-  }
-
-  addItem() {
-    this.cartService.cart = [...this.cartService.cart, 1];
-  }
+  ngOnInit(): void {}
 }
