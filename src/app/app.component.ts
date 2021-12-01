@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { CartService } from './shared/services/cart.service';
+import { ProductService } from './shared/services/product.service';
 import { ShopifyService } from './shared/services/shopify.service';
 
 @Component({
@@ -11,7 +12,14 @@ import { ShopifyService } from './shared/services/shopify.service';
 export class AppComponent implements OnInit {
   title = 'mean-store-front-end';
 
-  constructor() {}
+  constructor(private productsService: ProductService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getProducts();
+  }
+
+  async getProducts() {
+    let products = await this.productsService.getAllProducts();
+    console.log(products);
+  }
 }
